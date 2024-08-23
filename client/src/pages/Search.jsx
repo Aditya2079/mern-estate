@@ -10,8 +10,8 @@ export default function Search() {
     parking: false,
     furnished: false,
     offer: false,
-    sort: 'created_at',
-    order: 'desc',
+    sort: 'createdAt', // Set to "createdAt" for Latest
+    order: 'desc', // Set to "desc" for descending order (Latest first)
   });
 
   const [loading, setLoading] = useState(false);
@@ -43,8 +43,8 @@ export default function Search() {
         parking: parkingFromUrl === 'true' ? true : false,
         furnished: furnishedFromUrl === 'true' ? true : false,
         offer: offerFromUrl === 'true' ? true : false,
-        sort: sortFromUrl || 'created_at',
-        order: orderFromUrl || 'desc',
+        sort: sortFromUrl || 'createdAt', // Default to "Latest"
+        order: orderFromUrl || 'desc', // Default to descending order
       });
     }
 
@@ -92,10 +92,8 @@ export default function Search() {
     }
 
     if (e.target.id === 'sort_order') {
-      const sort = e.target.value.split('_')[0] || 'created_at';
-
+      const sort = e.target.value.split('_')[0] || 'createdAt';
       const order = e.target.value.split('_')[1] || 'desc';
-
       setSidebardata({ ...sidebardata, sort, order });
     }
   };
@@ -127,9 +125,10 @@ export default function Search() {
     }
     setListings([...listings, ...data]);
   };
+
   return (
     <div className='flex flex-col md:flex-row'>
-      <div className='p-7  border-b-2 md:border-r-2 md:min-h-screen'>
+      <div className='p-7 border-b-2 md:border-r-2 md:min-h-screen'>
         <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
           <div className='flex items-center gap-2'>
             <label className='whitespace-nowrap font-semibold'>
@@ -214,13 +213,13 @@ export default function Search() {
             <label className='font-semibold'>Sort:</label>
             <select
               onChange={handleChange}
-              defaultValue={'created_at_desc'}
+              defaultValue={'createdAt_desc'} // Set "Latest" as default
               id='sort_order'
               className='border rounded-lg p-3'
             >
+              <option value='createdAt_desc'>Latest</option> {/* Default option */}
               <option value='regularPrice_desc'>Price high to low</option>
-              <option value='regularPrice_asc'>Price low to hight</option>
-              <option value='createdAt_desc'>Latest</option>
+              <option value='regularPrice_asc'>Price low to high</option>
               <option value='createdAt_asc'>Oldest</option>
             </select>
           </div>
@@ -233,7 +232,7 @@ export default function Search() {
         <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
           Listing results:
         </h1>
-        <div className='p-7 flex flex-wrap gap-4'>
+        <div className='p-7 grid grid-cols-1 md:grid-cols-2 gap-4'>
           {!loading && listings.length === 0 && (
             <p className='text-xl text-slate-700'>No listing found!</p>
           )}
